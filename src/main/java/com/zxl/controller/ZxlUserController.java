@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Author zhangxiaolei
  * @Date 2018/8/21
  **/
+// @RestController controller里面的方法都以json格式输出
 @RestController
 @RequestMapping("/zxlUserController")
 public class ZxlUserController {
