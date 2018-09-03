@@ -4,6 +4,7 @@ import com.zxl.dao.ZxlUserMapper;
 import com.zxl.entity.ZxlUser;
 import com.zxl.service.IZxlUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -23,5 +24,12 @@ public class ZxlUserServiceImpl implements IZxlUserService {
     public void saveUser(ZxlUser user) {
         user.setCreateTime(new Date());
         userMapper.saveUser(user);
+    }
+
+
+    @Override
+    @Cacheable(value="loginName")
+    public ZxlUser listUsers(String loginName) {
+        return userMapper.listUsers( loginName );
     }
 }

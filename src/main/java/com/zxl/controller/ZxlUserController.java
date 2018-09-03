@@ -3,9 +3,12 @@ package com.zxl.controller;
 import com.zxl.entity.ZxlUser;
 import com.zxl.service.IZxlUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @Description TODD
@@ -22,5 +25,11 @@ public class ZxlUserController {
     @RequestMapping(value = "/saveUser", method = RequestMethod.POST)
     public void saveUser(ZxlUser user) {
         userService.saveUser(user);
+    }
+
+    @RequestMapping(value = "/find")
+    public void findUser() {
+        ZxlUser user = userService.listUsers( "1" );
+        System.out.println(user);
     }
 }

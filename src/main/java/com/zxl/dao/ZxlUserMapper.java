@@ -3,6 +3,9 @@ package com.zxl.dao;
 import com.zxl.entity.ZxlUser;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface ZxlUserMapper {
@@ -12,4 +15,6 @@ public interface ZxlUserMapper {
             " #{loignPwd,jdbcType=VARCHAR}, #{birthDay,jdbcType=DATE}, #{createTime,jdbcType=TIMESTAMP})")
     void saveUser(ZxlUser user);
 
+    @Select( "SELECT * FROM zxl_user us WHERE us.login_name = #{loginName}" )
+    ZxlUser listUsers(String loginName);
 }

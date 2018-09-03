@@ -1,6 +1,7 @@
 package com.zxl.service;
 
 import com.zxl.entity.ZxlUser;
+import org.springframework.cache.annotation.Cacheable;
 
 /**
  * @Description TODD
@@ -10,4 +11,6 @@ import com.zxl.entity.ZxlUser;
 public interface IZxlUserService {
 
     void saveUser(ZxlUser user);
+
+    ZxlUser listUsers(String loginName);
 }
