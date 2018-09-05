@@ -16,6 +16,10 @@ public class ZxlUser implements Serializable {
     private String loginName;
 
     private String loignPwd;
+    /**
+     * 性别
+     */
+    private int sex;
     //将接收到的String转为date
     //@JsonFormat(pattern = "yyyy-MM-dd")
     @DateTimeFormat( pattern = "yyyy-MM-dd" )
