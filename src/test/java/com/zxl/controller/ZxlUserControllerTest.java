@@ -52,9 +52,17 @@ public class ZxlUserControllerTest {
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .param("userName","admin")
             .param("loginName","admin")
-            .param("loignPwd","admin")
+            .param("loginPwd","admin")
+            .param("sex","1")
             .param("birthDay","2018-08-08")
         );
     }
 
+    @Test
+    public void findUser() throws Exception{
+        mockMvc.perform(post("/zxlUserController/find")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("loginName","admin")
+        );
+    }
 }

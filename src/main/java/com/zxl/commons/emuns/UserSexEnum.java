@@ -15,4 +15,5 @@ public enum UserSexEnum {
         this.code = code;
         this.name = name;
     }
+
 }

@@ -2,13 +2,11 @@ package com.zxl.controller;
 
 import com.zxl.entity.ZxlUser;
 import com.zxl.service.IZxlUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * @Description TODD
@@ -18,6 +16,7 @@ import java.util.List;
 // @RestController controller里面的方法都以json格式输出
 @RestController
 @RequestMapping("/zxlUserController")
+@Slf4j
 public class ZxlUserController {
     @Autowired
     private IZxlUserService userService;
@@ -28,8 +27,7 @@ public class ZxlUserController {
     }
 
     @RequestMapping(value = "/find")
-    public void findUser() {
-        ZxlUser user = userService.listUsers( "1" );
-        System.out.println(user);
+    public void findUser(String loginName) {
+        ZxlUser user = userService.getUser( loginName );
     }
 }

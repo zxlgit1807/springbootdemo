@@ -1,6 +1,5 @@
 package com.zxl.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -15,11 +14,9 @@ public class ZxlUser implements Serializable {
 
     private String loginName;
 
-    private String loignPwd;
-    /**
-     * 性别
-     */
-    private int sex;
+    private String loginPwd;
+
+    private Integer sex;
     //将接收到的String转为date
     //@JsonFormat(pattern = "yyyy-MM-dd")
     @DateTimeFormat( pattern = "yyyy-MM-dd" )

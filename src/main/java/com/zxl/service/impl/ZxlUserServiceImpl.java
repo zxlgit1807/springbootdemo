@@ -28,8 +28,8 @@ public class ZxlUserServiceImpl implements IZxlUserService {
 
 
     @Override
-    @Cacheable(value="loginName")
-    public ZxlUser listUsers(String loginName) {
-        return userMapper.listUsers( loginName );
+    @Cacheable(value="zxlUserServiceImpl_getUser", key = "#loginName", unless = "#result == null")
+    public ZxlUser getUser(String loginName) {
+        return userMapper.getUser( loginName );
     }
 }

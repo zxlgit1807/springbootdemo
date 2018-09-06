@@ -12,5 +12,5 @@ public interface IZxlUserService {
 
     void saveUser(ZxlUser user);
 
-    ZxlUser listUsers(String loginName);
+    ZxlUser getUser(String loginName);
 }
