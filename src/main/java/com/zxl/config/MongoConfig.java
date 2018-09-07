@@ -25,6 +25,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class MongoConfig {
 
+    /**
+     * 获取配置信息
+     */
     @Data
     @ConfigurationProperties(prefix = "spring.data.mongodb")
     @Component
