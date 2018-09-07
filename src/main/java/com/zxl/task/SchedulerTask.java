@@ -23,11 +23,11 @@ public class SchedulerTask {
      *  ? : 只能用在每月第几天和星期两个域。表示不指定值
      *   - : 表示范围，例如在分域使用5-20，表示从5分到20分钟每分钟触发一次
      */
-    @Scheduled(cron="*/6 * * * * ?")
-    private void process1() {
-        LocalDateTime currentTime = LocalDateTime.now();
-        log.info("当前时间:{}", currentTime);
-    }
+//    @Scheduled(cron="*/6 * * * * ?")
+//    private void process1() {
+//        LocalDateTime currentTime = LocalDateTime.now();
+//        log.info("当前时间:{}", currentTime);
+//    }
 
     /**
      * fixedRate 上一次开始执行时间点之后6秒再执行
