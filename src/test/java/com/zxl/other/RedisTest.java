@@ -21,8 +21,8 @@ public class RedisTest {
 
     @Test
     public void beginTest() {
-        stringRedisTemplate.opsForValue().set("aa", "123");
-        String s = stringRedisTemplate.opsForValue().get("aa");
-        System.out.println("redis中aa的值为"+ s);
+//        stringRedisTemplate.opsForValue().set("aa", "123");
+//        String s = stringRedisTemplate.opsForValue().get("aa");
+//        System.out.println("redis中aa的值为"+ s);
     }
 }

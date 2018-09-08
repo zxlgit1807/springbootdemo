@@ -3,10 +3,15 @@ package com.zxl.controller;
 import com.zxl.entity.ZxlUser;
 import com.zxl.service.IZxlUserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @Description TODD
@@ -14,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date 2018/8/21
  **/
 // @RestController controller里面的方法都以json格式输出
-@RestController
+@Controller
 @RequestMapping("/zxlUserController")
 @Slf4j
 public class ZxlUserController {
@@ -29,5 +34,26 @@ public class ZxlUserController {
     @RequestMapping(value = "/find")
     public void findUser(String loginName) {
         ZxlUser user = userService.getUser( loginName );
+    }
+
+    @RequestMapping("/login")
+    public void login(String loginName, String loginPwd) {
+        UsernamePasswordToken token = new UsernamePasswordToken(loginName, loginPwd);
+        Subject currentUser = SecurityUtils.getSubject();
+        try {
+            currentUser.login(token);
+        } catch (UnknownAccountException e) {
+            log.error("账号不存在");
+        } catch (IncorrectCredentialsException e) {
+            log.error("密码不正确");
+        } catch (Exception e) {
+            log.error("其它错误{}", e.getMessage());
+        }
+        System.out.println("111111111");
+    }
+
+    @RequestMapping(value = "/toLogin")
+    private String toLogin() {
+        return "login";
     }
 }

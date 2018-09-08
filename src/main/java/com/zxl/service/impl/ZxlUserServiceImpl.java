@@ -1,5 +1,6 @@
 package com.zxl.service.impl;
 
+import com.zxl.commons.emuns.CryptoUtils;
 import com.zxl.dao.ZxlUserMapper;
 import com.zxl.entity.ZxlUser;
 import com.zxl.service.IZxlUserService;
@@ -23,12 +24,13 @@ public class ZxlUserServiceImpl implements IZxlUserService {
     @Override
     public void saveUser(ZxlUser user) {
         user.setCreateTime(new Date());
+        user.setLoginPwd(CryptoUtils.encoderByMd5(user.getLoginName(), user.getLoginPwd()));
         userMapper.saveUser(user);
     }
 
 
     @Override
-    @Cacheable(value="zxlUserServiceImpl_getUser", key = "#loginName", unless = "#result == null")
+    //@Cacheable(value="zxlUserServiceImpl_getUser", key = "#loginName", unless = "#result == null")
     public ZxlUser getUser(String loginName) {
         return userMapper.getUser( loginName );
     }

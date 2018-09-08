@@ -22,9 +22,9 @@ public class BookFileServiceImplTest {
 
     @Test
     public void saveBookFile() {
-        BookFileInfo bookFileInfo = new BookFileInfo();
-        bookFileInfo.setId("123");
-        bookFileInfo.setDocumentname("123");
-        fileMongoDao.save(bookFileInfo);
+//        BookFileInfo bookFileInfo = new BookFileInfo();
+//        bookFileInfo.setId("123");
+//        bookFileInfo.setDocumentname("123");
+//        fileMongoDao.save(bookFileInfo);
     }
 }

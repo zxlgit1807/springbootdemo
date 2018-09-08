@@ -59,7 +59,7 @@
 		<appender-ref ref="FILE" />
     </root>
 
-<!--	<logger name="org.apache.commons.httpclient" level="ERROR" />
+	<logger name="org.apache.commons.httpclient" level="ERROR" />
 	<logger name="org.apache.http.wire" level="ERROR" />
 	<logger name="org.apache.http.headers" level="ERROR" />
 	<logger name="org.apache.shiro.mgt.AbstractRememberMeManager" level="OFF" />
@@ -82,10 +82,10 @@
 	<logger name="org.springframework.jndi.JndiTemplate" level="INFO" />
 	<logger name="org.springframework.jndi.JndiLocatorDelegate" level="INFO" />
 	<logger name="org.springframework.jndi.JndiPropertySource" level="INFO" />
-	<logger name="org.mongodb.driver.cluster" level="INFO" />
+	<logger name="org.mongodb.driver.cluster" level="off" />
 	<logger name="org.springframework.beans.factory.support.DefaultListableBeanFactory" level="INFO" />
 	<logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager" level="off" />
 	<logger name="org.apache.tomcat.util.scan.StandardJarScanner" level="off" />
 	<logger name="com.atomikos.recovery.xa.XaResourceRecoveryManager" level="off" />
-	<logger name="com.atomikos.datasource.xa.XATransactionalResource" level="off" />-->
+	<logger name="com.atomikos.datasource.xa.XATransactionalResource" level="off" />
 </configuration>
