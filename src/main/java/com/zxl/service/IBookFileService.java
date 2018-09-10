@@ -1,6 +1,9 @@
 package com.zxl.service;
 
 import com.zxl.entity.mongo.primary.BookFileInfo;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 /**
  * @Auther: ZXL
@@ -10,4 +13,6 @@ import com.zxl.entity.mongo.primary.BookFileInfo;
 public interface IBookFileService {
 
     void saveBookFile(BookFileInfo bookFileInfo);
+
+    void saveBookFileByFile(MultipartFile file) throws IOException;
 }

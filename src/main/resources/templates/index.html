@@ -3,8 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+<!--    <script th:src="@{/webjars/jquery/dist/jquery.min.js}"></script>-->
+    <!--<script src="/webjars/jquery/3.3.1/dist/jquery.min.js"></script>-->
+    <script src="/webjars/jquery/dist/jquery.min.js"></script>
 </head>
+<script type="text/javascript">
+    var uploading = false;
+
+    $(document).ready(function(){
+        $("#btn").click(function(){
+            if(uploading){
+                alert("文件正在上传中，请稍候");
+                return false;
+            }
+            $.ajax({
+                url: "/bookFileController/upload",
+                type: 'POST',
+                cache: false,
+                data: new FormData($('#upload')[0]),
+                processData: false,
+                contentType: false,
+                dataType:"json",
+                beforeSend: function(){
+                    uploading = true;
+                },
+                success : function(data) {
+                    uploading = false;
+                    alert(data.result);
+                }
+            });
+        });
+   });
+</script>
 <body>
-主页
+<form id="upload" enctype="multipart/form-data" method="post"><p style='color:red;text-align:left;'>
+    <input type="file" name="file" id="uploadimage"/><br/>
+    <input type="button" value="上传" id="btn" style="width:137px; height:27px"/>
+</form>
 </body>
 </html>

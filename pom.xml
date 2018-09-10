@@ -24,6 +24,8 @@
 		<java.version>1.8</java.version>
 		<flyway.version>5.1.4</flyway.version>
 		<mybatis.version>1.3.1</mybatis.version>
+		<jquery.version>3.3.1</jquery.version>
+		<locator.version>0.34</locator.version>
 	</properties>
 
 	<dependencies>
@@ -89,6 +91,18 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<!-- 引用jquery -->
+		<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>jquery</artifactId>
+			<version>${jquery.version}</version>
+		</dependency>
+		<!--可以让你在hrml引用jquery省略版本号-->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>webjars-locator</artifactId>
+			<version>${locator.version}</version>
 		</dependency>
 	</dependencies>
 
