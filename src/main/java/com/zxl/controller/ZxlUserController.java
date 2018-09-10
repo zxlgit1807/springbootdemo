@@ -27,8 +27,9 @@ public class ZxlUserController {
     private IZxlUserService userService;
 
     @RequestMapping(value = "/saveUser", method = RequestMethod.POST)
-    public void saveUser(ZxlUser user) {
+    public String saveUser(ZxlUser user) {
         userService.saveUser(user);
+        return "/zxlUserController/toLogin";
     }
 
     @RequestMapping(value = "/find")
@@ -36,8 +37,14 @@ public class ZxlUserController {
         ZxlUser user = userService.getUser( loginName );
     }
 
+    /**
+     * 不知道有有没有更好的跳controller方式
+     * @param loginName
+     * @param loginPwd
+     * @return
+     */
     @RequestMapping("/login")
-    public void login(String loginName, String loginPwd) {
+    public String login(String loginName, String loginPwd) {
         UsernamePasswordToken token = new UsernamePasswordToken(loginName, loginPwd);
         Subject currentUser = SecurityUtils.getSubject();
         try {
@@ -49,11 +56,19 @@ public class ZxlUserController {
         } catch (Exception e) {
             log.error("其它错误{}", e.getMessage());
         }
-        System.out.println("111111111");
+        if (currentUser.isAuthenticated()) {
+            return "redirect:/zxlUserController/toIndex";
+        }
+        return "redirect:/zxlUserController/toLogin";
     }
 
     @RequestMapping(value = "/toLogin")
     private String toLogin() {
         return "login";
+    }
+
+    @RequestMapping(value = "/toIndex")
+    private String toIndex() {
+        return "index";
     }
 }
