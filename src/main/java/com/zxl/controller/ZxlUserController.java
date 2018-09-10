@@ -1,5 +1,6 @@
 package com.zxl.controller;
 
+import com.zxl.commons.utils.ResultResponse;
 import com.zxl.entity.ZxlUser;
 import com.zxl.service.IZxlUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,8 +34,11 @@ public class ZxlUserController {
     }
 
     @RequestMapping(value = "/find")
-    public void findUser(String loginName) {
+    public ResultResponse findUser(String loginName) {
         ZxlUser user = userService.getUser( loginName );
+        ResultResponse resultResponse = new ResultResponse();
+        resultResponse.setObj(user);
+        return resultResponse;
     }
 
     /**
