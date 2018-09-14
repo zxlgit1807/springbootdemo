@@ -1,20 +1,16 @@
 package com.zxl.controller;
 
-import com.zxl.entity.ZxlUser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.Date;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -48,13 +44,12 @@ public class ZxlUserControllerTest {
      * @throws Exception
      */
     @Test
-    @Rollback(true)
     public void saveUser() throws Exception{
         mockMvc.perform(post("/zxlUserController/saveUser")
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-            .param("userName","admin")
-            .param("loginName","admin")
-            .param("loginPwd","admin")
+            .param("userName","张三")
+            .param("loginName","zhangsan")
+            .param("loginPwd","zhangsan")
             .param("sex","1")
             .param("birthDay","2018-08-08")
         );

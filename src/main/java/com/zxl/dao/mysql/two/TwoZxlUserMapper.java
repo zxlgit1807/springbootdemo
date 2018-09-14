@@ -1,4 +1,4 @@
-package com.zxl.dao;
+package com.zxl.dao.mysql.two;
 
 import com.zxl.entity.ZxlUser;
 import org.apache.ibatis.annotations.*;
@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.*;
  * 用户mapper
  */
 @Mapper
-public interface ZxlUserMapper {
+public interface TwoZxlUserMapper {
 
     @Insert("insert into zxl_user (user_name, login_name, login_pwd,sex, birth_day, create_time)\n" +
             " values (#{userName,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, \n" +

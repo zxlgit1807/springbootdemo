@@ -1,11 +1,10 @@
 package com.zxl.service.impl;
 
 import com.zxl.commons.emuns.CryptoUtils;
-import com.zxl.dao.ZxlUserMapper;
+import com.zxl.dao.mysql.one.ZxlUserMapper;
 import com.zxl.entity.ZxlUser;
 import com.zxl.service.IZxlUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;

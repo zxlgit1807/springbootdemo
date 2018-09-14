@@ -48,7 +48,7 @@ public class ShiroConfig {
 
     /**
      * 这里注意，之前一直没设置加密策略，导致一直没有加密
-     * 网上代码真吭，都是复制张贴
+     * 网上代码真坑
      * @return
      */
     @Bean
