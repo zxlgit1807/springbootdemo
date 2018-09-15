@@ -8,10 +8,8 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -23,7 +21,6 @@ import javax.sql.DataSource;
  * @Auther: ZXL
  * @Date: 2018/9/14
  * @Description: 多数据源配置（主要就是数据源、factory及事物管理）。这里的写法是不用包路径下对应不同的数据源
- * Q1 : 第二个数据源不存在都不报错
  */
 @Component
 public class DataSourceConfig {
@@ -31,8 +28,6 @@ public class DataSourceConfig {
     /**
      * annotationClass 表示只扫描有@mapper注解接口
      */
-    @EnableConfigurationProperties
-    @EnableAutoConfiguration
     @Configuration
     @MapperScan(basePackages = "com.zxl.dao.mysql.one", sqlSessionFactoryRef = "oneSqlSessionFactory",
             sqlSessionTemplateRef = "oneSqlSessionTemplate", annotationClass = Mapper.class)
@@ -75,8 +70,7 @@ public class DataSourceConfig {
             // 实现分布式事物关键，将dataSource交给Atomikos托管
             AtomikosDataSourceBean ds = new AtomikosDataSourceBean();
             ds.setXaDataSource(xaDataSource);
-            ds.setUniqueResourceName("oneDataSource");
-            ds.setMaxIdleTime(10000);
+            ds.setUniqueResourceName("jtaOneDataSource");
             return ds;
         }
 
@@ -109,8 +103,6 @@ public class DataSourceConfig {
     /**
      *
      */
-    @EnableConfigurationProperties
-    @EnableAutoConfiguration
     @Configuration
     @MapperScan(basePackages = "com.zxl.dao.mysql.two", sqlSessionFactoryRef = "twoSqlSessionFactory",
             sqlSessionTemplateRef = "twoSqlSessionTemplate", annotationClass = Mapper.class)
@@ -133,8 +125,7 @@ public class DataSourceConfig {
 
             AtomikosDataSourceBean ds = new AtomikosDataSourceBean();
             ds.setXaDataSource(xaDataSource);
-            ds.setUniqueResourceName("twoDataSource");
-            ds.setMaxIdleTime(10000);
+            ds.setUniqueResourceName("jtaTwoDataSource");
             return ds;
         }
 
