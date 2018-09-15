@@ -1,14 +1,17 @@
 package com.zxl.config;
 
-import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.pool.xa.DruidXADataSource;
+import com.atomikos.jdbc.AtomikosDataSourceBean;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -19,9 +22,8 @@ import javax.sql.DataSource;
 /**
  * @Auther: ZXL
  * @Date: 2018/9/14
- * @Description: 多数据源配置。这里的写法是不用包路径下对应不同的数据源
- * 主要就是数据源、factory及事物管理
- * 未完待续，有错误
+ * @Description: 多数据源配置（主要就是数据源、factory及事物管理）。这里的写法是不用包路径下对应不同的数据源
+ * Q1 : 第二个数据源不存在都不报错
  */
 @Component
 public class DataSourceConfig {
@@ -29,16 +31,14 @@ public class DataSourceConfig {
     /**
      * annotationClass 表示只扫描有@mapper注解接口
      */
+    @EnableConfigurationProperties
+    @EnableAutoConfiguration
     @Configuration
     @MapperScan(basePackages = "com.zxl.dao.mysql.one", sqlSessionFactoryRef = "oneSqlSessionFactory",
             sqlSessionTemplateRef = "oneSqlSessionTemplate", annotationClass = Mapper.class)
     public static class OneDataSourceConfig {
 
-        /**
-         * 获取配置信息
-         * @return
-         */
-        @Bean
+        @Bean("oneDataSourceProperties")
         @Primary
         @ConfigurationProperties("spring.datasource.one")
         public DataSourceProperties getDataSourceProperties() {
@@ -46,10 +46,10 @@ public class DataSourceConfig {
         }
 
         /**
-         * 使用druid，或者默认的也行
+         * 没有实现分布式事物写法
          * @return
          */
-        @Bean
+      /*  @Bean("oneDataSource")
         @Primary
         public DataSource getDataSource() {
             DruidDataSource dataSource = new DruidDataSource();
@@ -58,9 +58,29 @@ public class DataSourceConfig {
             dataSource.setUsername(dataSourceProperties.getUsername().trim());
             dataSource.setPassword(dataSourceProperties.getPassword().trim());
             return dataSource;
+        }*/
+
+        /**
+         * 分布式事物写法
+         * @return
+         */
+        @Bean("oneDataSource")
+        @Primary
+        public DataSource getDataSource() {
+            DruidXADataSource xaDataSource = new DruidXADataSource();
+            DataSourceProperties dataSourceProperties = getDataSourceProperties();
+            xaDataSource.setUrl(dataSourceProperties.getUrl().trim());
+            xaDataSource.setUsername(dataSourceProperties.getUsername().trim());
+            xaDataSource.setPassword(dataSourceProperties.getPassword().trim());
+            // 实现分布式事物关键，将dataSource交给Atomikos托管
+            AtomikosDataSourceBean ds = new AtomikosDataSourceBean();
+            ds.setXaDataSource(xaDataSource);
+            ds.setUniqueResourceName("oneDataSource");
+            ds.setMaxIdleTime(10000);
+            return ds;
         }
 
-        @Bean
+        @Bean("oneMybatisProperties")
         @Primary
         @ConfigurationProperties(MybatisProperties.MYBATIS_PREFIX + ".one")
         public MybatisProperties getMybatisProperties() {
@@ -87,31 +107,35 @@ public class DataSourceConfig {
     }
 
     /**
-     * 第二个数据源
+     *
      */
+    @EnableConfigurationProperties
+    @EnableAutoConfiguration
     @Configuration
     @MapperScan(basePackages = "com.zxl.dao.mysql.two", sqlSessionFactoryRef = "twoSqlSessionFactory",
             sqlSessionTemplateRef = "twoSqlSessionTemplate", annotationClass = Mapper.class)
     public static class TwoDataSourceConfig {
 
-        /**
-         * 获取配置信息
-         * @return
-         */
+
         @Bean("twoDataSourceProperties")
         @ConfigurationProperties("spring.datasource.two")
         public DataSourceProperties getDataSourceProperties() {
             return new DataSourceProperties();
         }
 
-        @Bean
+        @Bean("twoDataSource")
         public DataSource getDataSource() {
-            DruidDataSource dataSource = new DruidDataSource();
+            DruidXADataSource xaDataSource = new DruidXADataSource();
             DataSourceProperties dataSourceProperties = getDataSourceProperties();
-            dataSource.setUrl(dataSourceProperties.getUrl().trim());
-            dataSource.setUsername(dataSourceProperties.getUsername().trim());
-            dataSource.setPassword(dataSourceProperties.getPassword().trim());
-            return dataSource;
+            xaDataSource.setUrl(dataSourceProperties.getUrl().trim());
+            xaDataSource.setUsername(dataSourceProperties.getUsername().trim());
+            xaDataSource.setPassword(dataSourceProperties.getPassword().trim());
+
+            AtomikosDataSourceBean ds = new AtomikosDataSourceBean();
+            ds.setXaDataSource(xaDataSource);
+            ds.setUniqueResourceName("twoDataSource");
+            ds.setMaxIdleTime(10000);
+            return ds;
         }
 
         @Bean("twoBatisProperties")
