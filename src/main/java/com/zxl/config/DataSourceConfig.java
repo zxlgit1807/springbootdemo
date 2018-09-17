@@ -2,7 +2,9 @@ package com.zxl.config;
 
 import com.alibaba.druid.pool.xa.DruidXADataSource;
 import com.atomikos.jdbc.AtomikosDataSourceBean;
+import com.github.pagehelper.PageInterceptor;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -16,6 +18,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 /**
  * @Auther: ZXL
@@ -89,6 +92,20 @@ public class DataSourceConfig {
             // 配置mapper.xml的扫描路径
             //factoryBean.setMapperLocations(getMybatisProperties().resolveMapperLocations());
             //factoryBean.setTypeAliasesPackage(getMybatisProperties().getTypeAliasesPackage());
+            // 分页插件
+            Interceptor interceptor = new PageInterceptor();
+            Properties properties = new Properties();
+            //数据库
+            properties.setProperty("helperDialect", "mysql");
+            //是否将参数offset作为PageNum使用
+            properties.setProperty("offsetAsPageNum", "true");
+            //是否进行count查询
+            properties.setProperty("rowBoundsWithCount", "true");
+            //是否分页合理化
+            properties.setProperty("reasonable", "false");
+            interceptor.setProperties(properties);
+            factoryBean.setPlugins(new Interceptor[] {interceptor});
+
             return factoryBean.getObject();
         }
 

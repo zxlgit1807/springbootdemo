@@ -114,6 +114,12 @@
 			<artifactId>webjars-locator</artifactId>
 			<version>${locator.version}</version>
 		</dependency>
+		<!--分页插件-->
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper</artifactId>
+			<version>5.0.0</version>
+		</dependency>
 		<!--监控应用，方便查错 不会用，网上都千篇一律，无论如何配置都只显示heralth和info
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

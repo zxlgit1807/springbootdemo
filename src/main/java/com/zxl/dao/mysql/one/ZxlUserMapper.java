@@ -3,6 +3,8 @@ package com.zxl.dao.mysql.one;
 import com.zxl.entity.ZxlUser;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 /**
  * 用户mapper
  */
@@ -12,6 +14,7 @@ public interface ZxlUserMapper {
     @Insert("insert into zxl_user (user_name, login_name, login_pwd,sex, birth_day, create_time)\n" +
             " values (#{userName,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, \n" +
             " #{loginPwd,jdbcType=VARCHAR},#{sex}, #{birthDay,jdbcType=DATE}, #{createTime,jdbcType=TIMESTAMP})")
+    @Options(useGeneratedKeys = true)
     void saveUser(ZxlUser user);
 
     /**
@@ -32,6 +35,28 @@ public interface ZxlUserMapper {
     })
     ZxlUser getUser(@Param("loginName") String loginName);
 
+    @Select( "SELECT * FROM zxl_user us WHERE us.id = #{id}" )
+    @Results({
+            @Result(property = "userName",  column = "user_name"),
+            @Result(property = "loginName",  column = "login_name"),
+            @Result(property = "loginPwd",  column = "login_pwd"),
+            @Result(property = "birthDay",  column = "birth_day"),
+            @Result(property = "createTime",  column = "create_time"),
+            @Result(property = "updateTime",  column = "update_time"),
+    })
+    ZxlUser getUserById(@Param("id") Integer id);
+
     @Delete("DELETE FROM zxl_user WHERE id = #{id}")
     void deleteUserById(Integer id);
+
+    @Select( "SELECT * FROM zxl_user us" )
+    @Results({
+            @Result(property = "userName",  column = "user_name"),
+            @Result(property = "loginName",  column = "login_name"),
+            @Result(property = "loginPwd",  column = "login_pwd"),
+            @Result(property = "birthDay",  column = "birth_day"),
+            @Result(property = "createTime",  column = "create_time"),
+            @Result(property = "updateTime",  column = "update_time"),
+    })
+    List<ZxlUser> listUsers();
 }

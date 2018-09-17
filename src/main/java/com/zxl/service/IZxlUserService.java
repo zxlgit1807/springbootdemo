@@ -1,7 +1,10 @@
 package com.zxl.service;
 
 import com.zxl.entity.ZxlUser;
+import org.apache.catalina.LifecycleState;
 import org.springframework.cache.annotation.Cacheable;
+
+import java.util.List;
 
 /**
  * @Description TODD
@@ -10,7 +13,13 @@ import org.springframework.cache.annotation.Cacheable;
  **/
 public interface IZxlUserService {
 
-    void saveUser(ZxlUser user);
+    ZxlUser saveUser(ZxlUser user);
 
     ZxlUser getUser(String loginName);
+
+    ZxlUser getUserById(Integer id);
+
+    void delUserById(Integer id);
+
+    List<ZxlUser> listUsers();
 }

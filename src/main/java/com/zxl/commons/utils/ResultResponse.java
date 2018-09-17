@@ -12,6 +12,8 @@ public class ResultResponse {
 
     private boolean success = true;
 
+    private PagingResult pagingResult;
+
     private String msg;
 
     private Object obj;

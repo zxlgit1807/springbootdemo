@@ -29,6 +29,7 @@ public class ShiroConfig {
         map.put("/logout", "logout");
         map.put("/zxlUserController/login", "anon");
         map.put("/zxlUserController/saveUser", "anon");
+        map.put("/zxlUserController/error", "anon");
         // 配置不会被拦截的链接
         map.put("/login.html", "anon");
         //配置退出 过滤器,其中的具体的退出代码Shiro已经实现
