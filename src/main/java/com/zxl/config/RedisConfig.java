@@ -22,6 +22,7 @@ import java.time.Duration;
  **/
 @Configuration
 @EnableCaching
+//@PropertySource("classpath:config/redis.properties") 自动配置地址
 public class RedisConfig extends CachingConfigurerSupport {
 
     @Bean()
