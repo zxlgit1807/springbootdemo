@@ -22,4 +22,6 @@ public interface IZxlUserService {
     void delUserById(Integer id);
 
     List<ZxlUser> listUsers();
+
+    void sendUserByMq();
 }
