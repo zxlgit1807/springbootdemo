@@ -125,6 +125,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
+		<!-- shiro缓存管理、session使用，不需要自己再去写 -->
+		<dependency>
+			<groupId>org.crazycake</groupId>
+			<artifactId>shiro-redis</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+
 		<!--监控应用，方便查错 不会用，网上都千篇一律，无论如何配置都只显示heralth和info
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
