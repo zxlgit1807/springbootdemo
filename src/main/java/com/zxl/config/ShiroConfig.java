@@ -1,11 +1,22 @@
 package com.zxl.config;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.mgt.RememberMeManager;
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.Cookie;
+import org.apache.shiro.web.servlet.SimpleCookie;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.crazycake.shiro.RedisCacheManager;
+import org.crazycake.shiro.RedisManager;
+import org.crazycake.shiro.RedisSessionDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.apache.shiro.mgt.SecurityManager;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -15,6 +26,13 @@ import java.util.Map;
  */
 @Configuration
 public class ShiroConfig {
+
+    @Value("${spring.redis.host}")
+    private String redis_host;
+    @Value("${spring.redis.port}")
+    private int redis_port;
+    @Value("${spring.redis.password}")
+    private String redis_pwd;
     /**
      * 配置拦截
      * @param securityManager
@@ -24,7 +42,6 @@ public class ShiroConfig {
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-
         Map<String, String> map = new LinkedHashMap<String,String>();
         map.put("/logout", "logout");
         map.put("/zxlUserController/login", "anon");
@@ -59,11 +76,17 @@ public class ShiroConfig {
         return myShiroRealm;
     }
 
-
     @Bean
     public SecurityManager securityManager(){
         DefaultWebSecurityManager securityManager =  new DefaultWebSecurityManager();
+        // 设置realm
         securityManager.setRealm(myShiroRealm());
+        // session管理器
+        securityManager.setSessionManager(sessionManager());
+        // cookie 管理器
+        securityManager.setRememberMeManager(rememberMeManager());
+        // 缓存管理器
+        securityManager.setCacheManager(cacheManager());
         return securityManager;
     }
 
@@ -79,5 +102,67 @@ public class ShiroConfig {
         //storedCredentialsHexEncoded默·认是true，此时用的是密码加密用的是Hex编码；false时用Base64编码
         hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
         return hashedCredentialsMatcher;
+    }
+
+    //	记住我的配置
+    @Bean
+    public RememberMeManager rememberMeManager() {
+        Cookie cookie = new SimpleCookie("rememberMe");
+        cookie.setHttpOnly(true); //通过js脚本将无法读取到cookie信息
+        cookie.setMaxAge(60 * 60 * 24); //cookie保存一天
+        CookieRememberMeManager manager=new CookieRememberMeManager();
+        manager.setCookie(cookie);
+        // 将cookie加密的秘钥
+        manager.setCipherKey(Base64.decode("3AvVhmFLUs0KTA3Kprsdag=="));
+        return manager;
+    }
+
+
+    /**
+     * session 共享
+     * @return
+     */
+    @Bean(name = "sessionManager")
+    public DefaultWebSessionManager sessionManager() {
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        sessionManager.setSessionDAO(redisSessionDAO());
+        return sessionManager;
+    }
+
+    /**
+     * sessionDao层的实现 通过redis
+     * 使用的是shiro-redis开源插件
+     * @return
+     */
+    @Bean
+    public RedisSessionDAO redisSessionDAO() {
+        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
+        redisSessionDAO.setRedisManager(redisManager());
+        return redisSessionDAO;
+    }
+
+    /**
+     * 配置shiro redisManager
+     * 用的是shiro-redis开源插件
+     * @return
+     */
+    public RedisManager redisManager() {
+        RedisManager redisManager = new RedisManager();
+        redisManager.setHost(redis_host);
+        redisManager.setPort(redis_port);
+        redisManager.setTimeout(1800);// 配置缓存过期时间
+        redisManager.setPassword(redis_pwd);
+        return redisManager;
+    }
+
+    /**
+     * cacheManager 缓存 redis实现
+     * 使用的是shiro-redis开源插件
+     * @return
+     */
+    public RedisCacheManager cacheManager() {
+        RedisCacheManager redisCacheManager = new RedisCacheManager();
+        redisCacheManager.setRedisManager(redisManager());
+        return redisCacheManager;
     }
 }

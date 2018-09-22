@@ -4,6 +4,7 @@ import com.zxl.commons.emuns.CryptoUtils;
 import com.zxl.dao.mysql.one.ZxlUserMapper;
 import com.zxl.entity.ZxlUser;
 import com.zxl.service.IZxlUserService;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -23,6 +24,9 @@ public class ZxlUserServiceImpl implements IZxlUserService {
 
     @Autowired
     private ZxlUserMapper userMapper;
+    @Autowired
+    private AmqpTemplate amqpTemplate;
+
     // CachePut 不会检查缓存中是否存在，而是每次都存入
     @Override
     @CachePut(value="zxlUserServiceImpl", key = "#user.id", unless = "#result == null")
@@ -55,5 +59,19 @@ public class ZxlUserServiceImpl implements IZxlUserService {
     @Override
     public List<ZxlUser> listUsers() {
         return userMapper.listUsers();
+    }
+
+    @Override
+    public void sendUserByMq() {
+        String context = "hello " + new Date();
+//        this.amqpTemplate.convertAndSend("hello", context);
+//
+//        // 通过topic
+//        this.amqpTemplate.convertAndSend("exchange", "topic.one", "hhhhhhhhhh");
+//
+//        this.amqpTemplate.convertAndSend("exchange", "topic.two", "gggggggggg");
+
+        // 通过广播模式,绑定了这个交换机的所有队列都收到这个消息
+        this.amqpTemplate.convertAndSend("fanoutExchange", "123", "ppppppppp");
     }
 }

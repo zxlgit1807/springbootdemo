@@ -25,7 +25,7 @@ import java.time.Duration;
 //@PropertySource("classpath:config/redis.properties") 自动配置地址
 public class RedisConfig extends CachingConfigurerSupport {
 
-    @Bean()
+    @Bean
     public CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
         RedisCacheConfiguration cacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofSeconds(0))   // 默认的cache time-to-live.
