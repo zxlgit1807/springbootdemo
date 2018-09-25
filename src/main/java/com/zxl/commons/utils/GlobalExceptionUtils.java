@@ -28,12 +28,6 @@ public class GlobalExceptionUtils {
         if (e instanceof HttpRequestMethodNotSupportedException){
             return ResultResponse.error("不支持的请求方式/");
         }
-        if (e instanceof UnknownAccountException){
-            return ResultResponse.error("账号不存在");
-        }
-        if (e instanceof IncorrectCredentialsException){
-            return ResultResponse.error("密码不正确");
-        }
         log.error("【异常】："+e.getMessage(), e);
         return ResultResponse.error();
     }

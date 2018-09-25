@@ -8,12 +8,15 @@ import com.zxl.entity.ZxlUser;
 import com.zxl.service.IZxlUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -64,10 +67,16 @@ public class ZxlUserController {
      * @return
      */
     @RequestMapping("/login")
-    public String login(String loginName, String loginPwd) throws Exception{
+    public String login(@RequestParam String loginName, @RequestParam String loginPwd){
         UsernamePasswordToken token = new UsernamePasswordToken(loginName, loginPwd);
         Subject currentUser = SecurityUtils.getSubject();
-        currentUser.login(token);
+        try {
+            currentUser.login(token);
+        } catch (UnknownAccountException e) {
+            log.error("账号不存在");
+        } catch (IncorrectCredentialsException e) {
+            log.error("密码错误");
+        }
         if (currentUser.isAuthenticated()) {
             return "redirect:/zxlUserController/toIndex";
         }

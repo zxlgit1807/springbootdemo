@@ -45,16 +45,20 @@ public class ShiroConfig {
         Map<String, String> map = new LinkedHashMap<String,String>();
         map.put("/logout", "logout");
         map.put("/zxlUserController/login", "anon");
-        map.put("/zxlUserController/saveUser", "anon");
+        map.put("/zxlUserController/toLogin", "anon");
+        //map.put("/zxlUserController/saveUser", "anon");
         map.put("/zxlUserController/error", "anon");
         // 配置不会被拦截的链接
         map.put("/login.html", "anon");
+        map.put("/css/**", "anon");
+        map.put("/images/**", "anon");
+        map.put("/webjars/**", "anon");
         //配置退出 过滤器,其中的具体的退出代码Shiro已经实现
         map.put("/logout", "logout");
         //过滤链定义，从上向下顺序执行，一般将/**放在最为下边
         //<!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
         map.put("/**", "authc");
-        // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
+        // 如果不设置默认会自动寻找Web工程根目录下的"/images.jsp"页面
         shiroFilterFactoryBean.setLoginUrl("/zxlUserController/toLogin");
         // 登录成功后要跳转的链接
         shiroFilterFactoryBean.setSuccessUrl("/index.html");
@@ -150,7 +154,7 @@ public class ShiroConfig {
         RedisManager redisManager = new RedisManager();
         redisManager.setHost(redis_host);
         redisManager.setPort(redis_port);
-        redisManager.setTimeout(1800);// 配置缓存过期时间
+        redisManager.setTimeout(10);// 配置缓存过期时间
         redisManager.setPassword(redis_pwd);
         return redisManager;
     }
